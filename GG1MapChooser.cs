@@ -186,7 +186,7 @@ public class MapChooser : BasePlugin, IPluginConfig<MCConfig>
             {
                 if (players[slot].HasProposedMaps())
                     nominatedMaps.Remove(players[slot].ProposedMaps);
-                if (IsRTVThreshold())  // если достаточно голосов - запускаем голосование
+                if (IsRTVThreshold())  //if there are enough votes - we start voting
                 {
                     StartRTV();
                     return;
@@ -524,7 +524,7 @@ public class MapChooser : BasePlugin, IPluginConfig<MCConfig>
         voteTimer??= AddTimer(1.0f, EndOfVotes, TimerFlags.REPEAT | TimerFlags.STOP_ON_MAPCHANGE);
         DoAutoMapVote(null!, timeToVote, SSMC_ChangeMapTime.ChangeMapTime_MapEnd, Config.EndMapVoteWASDMenu);
     }
-// Автоматическая смена карты на рандомную подходящую
+    // Automatically change the map to a random suitable one
     private void GGMCDoAutoMapChange(SSMC_ChangeMapTime changeTime = SSMC_ChangeMapTime.ChangeMapTime_Now)
     {
         if (!canVote)
@@ -574,7 +574,7 @@ public class MapChooser : BasePlugin, IPluginConfig<MCConfig>
         DoMapChange(validmapnames[map], changeTime);
     }
 
-//  Команда на смену выбранной карты
+    //  Command to change the selected map
     private void DoMapChange(string mapChange, SSMC_ChangeMapTime changeTime = SSMC_ChangeMapTime.ChangeMapTime_Now)
     {
         if (MapIsChanging)
@@ -701,7 +701,7 @@ public class MapChooser : BasePlugin, IPluginConfig<MCConfig>
         return 0;
     }
 
-//  Делает меню из карт 
+    //  Makes a menu from maps
     private ChatMenu CreateMapsMenu(Action<CCSPlayerController,ChatMenuOption> action, CCSPlayerController playerController, bool limits=true)
     {
         var MapsMenu = new ChatMenu("List of maps:");
@@ -735,10 +735,10 @@ public class MapChooser : BasePlugin, IPluginConfig<MCConfig>
         {
             if ((mapcheck.Value.MinPlayers != 0 && numplayers < mapcheck.Value.MinPlayers) || (mapcheck.Value.MaxPlayers != 0 && numplayers > mapcheck.Value.MaxPlayers) )
             {
-                playersvalid = false; //сначала маркируем карту проходит ли она по кол-ву игроков
+                playersvalid = false; //First we mark the map to see if it passes the number of players
             }
-            if (limits && (_playedMaps.Contains(mapcheck.Key) || !playersvalid || IsNominated(mapcheck.Key))) //если включены лимиты и карта либо не валидна по списку 
-            {                                              // карт, которые уже были, либо по кол-ву игроков или номинирована - исключаем
+            if (limits && (_playedMaps.Contains(mapcheck.Key) || !playersvalid || IsNominated(mapcheck.Key))) //if limits are enabled and the map is not valid according to the list 
+            {                                              // maps that were already there, either by the number of players or nominated - we exclude
                 playersvalid = true;
                 continue;
             }
@@ -803,10 +803,10 @@ public class MapChooser : BasePlugin, IPluginConfig<MCConfig>
         {
             if ((mapcheck.Value.MinPlayers != 0 && numplayers < mapcheck.Value.MinPlayers) || (mapcheck.Value.MaxPlayers != 0 && numplayers > mapcheck.Value.MaxPlayers) )
             {
-                playersvalid = false; //сначала маркируем карту проходит ли она по кол-ву игроков
+                playersvalid = false; //First we mark the map to see if it passes the number of players
             }
-            if (limits && (_playedMaps.Contains(mapcheck.Key) || !playersvalid || IsNominated(mapcheck.Key))) //если включены лимиты и карта либо не валидна по списку 
-            {                                              // карт, которые уже были, либо по кол-ву игроков или номинирована - исключаем
+            if (limits && (_playedMaps.Contains(mapcheck.Key) || !playersvalid || IsNominated(mapcheck.Key))) //if limits are enabled and the map is not valid according to the list
+            {                                              // maps that were already there, either by the number of players or nominated - we exclude
                 playersvalid = true;
                 continue;
             }
@@ -833,8 +833,8 @@ public class MapChooser : BasePlugin, IPluginConfig<MCConfig>
         return MapsMenu;
     }
 
-// Админ выбирает ручной выбор карты для смены или автоматический
-//    private void AdminChangeMapHandle(CCSPlayerController caller, ChatMenuOption option)
+    // The admin chooses manual or automatic selection of the card for change
+    //    private void AdminChangeMapHandle(CCSPlayerController caller, ChatMenuOption option)
     private void AdminChangeMapHandle(CCSPlayerController caller, IWasdMenuOption option)
     {
         if (IsValidPlayer(caller))
@@ -854,8 +854,8 @@ public class MapChooser : BasePlugin, IPluginConfig<MCConfig>
             MenuManager.OpenChatMenu(caller, ChangeMapsMenu); */
         }
     }
-//  Админ выбрал ручной выбор для смены, выбор карты и смена
-//    private void AdminChangeMapManual(CCSPlayerController player, ChatMenuOption option)
+    //  Admin chose manual selection for change, card selection and change
+    //    private void AdminChangeMapManual(CCSPlayerController player, ChatMenuOption option)
     private void AdminChangeMapManual(CCSPlayerController player, IWasdMenuOption option)
     {
         if (IsValidPlayer(player))
@@ -864,11 +864,11 @@ public class MapChooser : BasePlugin, IPluginConfig<MCConfig>
             if(manager == null)
                 return;
             manager.CloseMenu(player);
-            IWasdMenu acmm_menu = CreateMapsMenuWASD(Handle_AdminManualChange, player, false); // no restrictions, because admn choose maps
+            IWasdMenu acmm_menu = CreateMapsMenuWASD(Handle_AdminManualChange, player, false); // no restrictions, because admin choose maps
             if (acmm_menu != null)
                 manager.OpenMainMenu(player, acmm_menu);
             
-/*            ChatMenu chatMenu = CreateMapsMenu(Handle_AdminManualChange, player, false); // no restrictions, because admn choose maps
+/*            ChatMenu chatMenu = CreateMapsMenu(Handle_AdminManualChange, player, false); // no restrictions, because admin choose maps
             if (chatMenu != null)
             {
                 MenuManager.OpenChatMenu(player, chatMenu);
@@ -876,8 +876,8 @@ public class MapChooser : BasePlugin, IPluginConfig<MCConfig>
         }
         return;
     }
-//  Карта выбрана - меняем    
-//    private void Handle_AdminManualChange(CCSPlayerController player, ChatMenuOption option)
+    //  The map is selected - change  
+    //    private void Handle_AdminManualChange(CCSPlayerController player, ChatMenuOption option)
     private void Handle_AdminManualChange(CCSPlayerController player, IWasdMenuOption option)
     {
         var manager = GetMenuManager();
@@ -895,8 +895,8 @@ public class MapChooser : BasePlugin, IPluginConfig<MCConfig>
         manager.CloseMenu(player);
         DoMapChange(map, SSMC_ChangeMapTime.ChangeMapTime_Now);
     }
-//  Админ выбрал автоматический выбор для смены, отсылка на GGMCDoAutoMapChange, которая с этим справляется
-//    private void AdminChangeMapAuto(CCSPlayerController player, ChatMenuOption option)
+    //  Admin chose automatic selection for change, reference to GGMCDoAutoMapChange, which handles this
+    //    private void AdminChangeMapAuto(CCSPlayerController player, ChatMenuOption option)
     private void AdminChangeMapAuto(CCSPlayerController player, IWasdMenuOption option)
     {
         Logger.LogInformation("[GGMC]: Admin " + player.PlayerName + " has chosen auto map change.");
@@ -906,8 +906,8 @@ public class MapChooser : BasePlugin, IPluginConfig<MCConfig>
         manager.CloseMenu(player);
         GGMCDoAutoMapChange(SSMC_ChangeMapTime.ChangeMapTime_Now);
     }
-//  Админ запускает общее голосования за выбор карты - выбор карт для голосования ручной или автоматом
-//    private void AdminStartVotesMapHandle(CCSPlayerController caller, ChatMenuOption option)
+    //  Admin starts general voting for map selection - manual or automatic selection of maps for voting
+    //    private void AdminStartVotesMapHandle(CCSPlayerController caller, ChatMenuOption option)
     private void AdminStartVotesMapHandle(CCSPlayerController caller, IWasdMenuOption option)
     {
         if (IsValidPlayer(caller))
@@ -929,8 +929,8 @@ public class MapChooser : BasePlugin, IPluginConfig<MCConfig>
             MenuManager.OpenChatMenu(caller, ChangeMapsMenu); */
         }
     }
-//  Админ выбрал ручной выбор карт    
-//    private void AdminVoteMapManual(CCSPlayerController player, ChatMenuOption option)
+    // Admin chose manual selection of maps
+    //    private void AdminVoteMapManual(CCSPlayerController player, ChatMenuOption option)
     private void AdminVoteMapManual(CCSPlayerController player, IWasdMenuOption option)
     {
         if (IsValidPlayer(player))
@@ -939,11 +939,11 @@ public class MapChooser : BasePlugin, IPluginConfig<MCConfig>
             if(manager == null)
                 return;
             manager.CloseMenu(player);
-            IWasdMenu avmm_menu = CreateMapsMenuWASD(Handle_VoteMapManual, player, false); // no restrictions, because admn choose maps
+            IWasdMenu avmm_menu = CreateMapsMenuWASD(Handle_VoteMapManual, player, false); // no restrictions, because admin choose maps
             if (avmm_menu != null)
                 manager.OpenMainMenu(player, avmm_menu);
             
-/*            ChatMenu chatMenu = CreateMapsMenu(Handle_VoteMapManual, player, false); // no restrictions, because admn choose maps
+/*            ChatMenu chatMenu = CreateMapsMenu(Handle_VoteMapManual, player, false); // no restrictions, because admin choose maps
             if (chatMenu != null)
             {
                 MenuManager.OpenChatMenu(player, chatMenu);
@@ -951,8 +951,8 @@ public class MapChooser : BasePlugin, IPluginConfig<MCConfig>
         }
         return;
     }
-//  Обработка процесса, пока админ набирает карты. Когда готово - запуск голосования
-//    private void Handle_VoteMapManual(CCSPlayerController caller, ChatMenuOption option)
+    //  Processing the process while the admin is drawing cards. When ready - start voting
+    //    private void Handle_VoteMapManual(CCSPlayerController caller, ChatMenuOption option)
     private void Handle_VoteMapManual(CCSPlayerController caller, IWasdMenuOption option)
     {
         if (IsValidPlayer(caller) && option != null && option.OptionDisplay != null)
@@ -991,7 +991,7 @@ public class MapChooser : BasePlugin, IPluginConfig<MCConfig>
             }
         }
     }
-//  В итоге Запуск голосования по вручную набранным картам
+    //  Finally Launch voting on manually selected maps
     private void DoManualMapVote(CCSPlayerController caller)
     {
         if (IsValidPlayer(caller))
@@ -1036,8 +1036,8 @@ public class MapChooser : BasePlugin, IPluginConfig<MCConfig>
         voteTimer??= AddTimer(1.0f, EndOfVotes, TimerFlags.REPEAT | TimerFlags.STOP_ON_MAPCHANGE);
         DoAutoMapVote(null!, timeToVote, SSMC_ChangeMapTime.ChangeMapTime_Now);
     }
-//  Старт голосования "менять карту или нет"
-//    private void VotesForChangeMapHandle(CCSPlayerController caller, ChatMenuOption option)
+    //   Start of voting "to change the map or not"
+    //    private void VotesForChangeMapHandle(CCSPlayerController caller, ChatMenuOption option)
     private void VotesForChangeMapHandle(CCSPlayerController caller, IWasdMenuOption option)
     {
         if (IsValidPlayer(caller))
@@ -1116,7 +1116,7 @@ public class MapChooser : BasePlugin, IPluginConfig<MCConfig>
         PrintToServerCenter(result);
         PrintToServerChat(result);
     }
-//  Автоматически набираются карты для голосования или используются набранные админом и запускается общее голосование
+    //  Voting cards are automatically collected or used by the admin and a general vote is launched
     private void DoAutoMapVote(CCSPlayerController caller, int timeToVote = 20, SSMC_ChangeMapTime changeTime = SSMC_ChangeMapTime.ChangeMapTime_Now, bool wasdmenu = false)
     {
         if (!canVote)
@@ -1225,7 +1225,7 @@ public class MapChooser : BasePlugin, IPluginConfig<MCConfig>
                 }
                 if (mapstochose > 0)
                 {
-//                    int cycles = 30; // если карты будут дублироваться, то повторных циклов не больше этого числа
+                    //                    int cycles = 30; //  if the maps are duplicated, then the number of repeated cycles is not more than this number
                     int choice, map;
                     List<int> selectedIndices = new List<int>();
                     i = 0;
@@ -1473,7 +1473,7 @@ public class MapChooser : BasePlugin, IPluginConfig<MCConfig>
             Console.WriteLine("Invalid rtv caller");
             return;
         }
-        if (rtv_can_start > 0) //Работает таймер задержки
+        if (rtv_can_start > 0) //The delay timer is working
         {
             caller.PrintToChat(Localizer["nortv.time", rtv_can_start]);
             return;
@@ -1491,7 +1491,7 @@ public class MapChooser : BasePlugin, IPluginConfig<MCConfig>
                 {
                     Logger.LogInformation($"{caller.PlayerName} voted rtv");
                     players[caller.Slot].VotedRtv = true;
-                    if (IsRTVThreshold())  // если достаточно голосов - запускаем голосование
+                    if (IsRTVThreshold())  // if there are enough votes, we start voting
                     {
                         StartRTV();
                         return;
@@ -2072,7 +2072,7 @@ public class MapChooser : BasePlugin, IPluginConfig<MCConfig>
             rtvTimer = null;
         }
     }
-    private void MakeRTVTimer (int interval)  // таймер для того, чтобы если кто-то напишет rtv, ему написали, через сколько секунд можно
+    private void MakeRTVTimer (int interval)  // a timer so that if someone writes rtv, they will write to him in how many seconds it is possible
     {
         if (interval > 0)
         {
