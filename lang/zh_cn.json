@@ -1,6 +1,7 @@
 {
   "mapchange.to": "{red}下一张地图为{0}",
   "extend.map": "延长地图",
+  "extend.win": "优胜者 - 扩展地图",
   "timetovote.left": " 还剩{green}{0}{default}秒更换地图.",
   "nortv.time": "RTV冷却时间{green}{0}{default}秒.",
   "already.rtv": "你已经投过票了, 还需{green}{0}{default}票.",
