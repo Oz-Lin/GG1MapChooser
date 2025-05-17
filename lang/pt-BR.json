@@ -48,5 +48,11 @@
   "nortv.allowed": " {red}O comando RTV não é permitido.",
   "nominate.notallowed": " {red}O comando de nomeação não é permitido.",
   "set.nextmap": "Definir próximo mapa",
-  "discord.log": "O próximo mapa será: {0}"
-}
+  "time.left": "{green}Tempo restante: {0} min, {1} seg.",
+  "rounds.left": "{red}Rodadas restantes: {0}.",
+  "wins.left": "{yellow}Vitórias restantes: {0}.",
+  "menu.move": "Mover",
+  "menu.select": "Selecionar",
+  "menu.back": "Voltar",
+  "menu.exit": "Sair"
+} 

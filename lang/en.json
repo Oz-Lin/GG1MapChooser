@@ -48,5 +48,11 @@
   "nortv.allowed": " {red}RTV command is not allowed.",
   "nominate.notallowed": " {red}Nominate command is not allowed.",
   "set.nextmap": "Set Next Map",
-  "discord.log": "Next map would be: {0}"
+  "time.left": "{green}Time left: {0} min, {1} sec.",
+  "rounds.left": "{red}Rounds left: {0}.",
+  "wins.left": "{yellow}Wins left: {0}.",
+  "menu.move": "Move",
+  "menu.select": "Select",
+  "menu.back": "Back",
+  "menu.exit": "Exit"
 } 
